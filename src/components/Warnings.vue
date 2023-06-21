@@ -4,10 +4,10 @@
       v-if="input.length > 0"
       :class="['row', 'symbol-list-main-row', 'show-text-row']">
       <span
-        class="bold-text show-text d-none"
         :class="{ 'd-sm-block': hiddenWarnings }"
+        class="bold-text show-text d-none"
         @click="showAll"
-        >{{ showWarningsText }}</span
+      >{{ showWarningsText }}</span
       >
     </div>
     <div v-if="input.length > 0" class="row symbol-list-main-row">
@@ -17,13 +17,13 @@
       <Warning
         v-for="warning in warnings"
         :key="warning.key"
-        :input="warning"
-        :hideable="warnings.length > 1" />
+        :hideable="warnings.length > 1"
+        :input="warning" />
     </div>
     <div class="row symbol-list-main-row">
       <hr
-        class="symbol-block-separator legend-separator"
-        :class="noWarnings ? 'no-warnings' : ''" />
+        :class="noWarnings ? 'no-warnings' : ''"
+        class="symbol-block-separator legend-separator" />
     </div>
     <div class="row symbol-list-main-row">
       <div class="symbol-list-table">
@@ -120,86 +120,86 @@
 </template>
 
 <script>
-import Vue from 'vue'
+import Vue from "vue";
 
-import i18n from '../i18n'
-import Warning from './Warning.vue'
+import i18n from "../i18n";
+import Warning from "./Warning.vue";
 
 export default {
-  name: 'Warnings',
+  name: "Warnings",
   components: {
-    Warning,
+    Warning
   },
-  props: ['input'],
+  props: ["input"],
   computed: {
     warnings() {
-      return this.input
+      return this.input;
     },
     visibleWarnings() {
-      return this.$store.getters.visibleWarnings
+      return this.$store.getters.visibleWarnings;
     },
     hiddenWarnings() {
-      return this.visibleWarnings.length !== this.input.length
+      return this.visibleWarnings.length !== this.input.length;
     },
     noWarnings() {
-      return this.warnings.length === 0
+      return this.warnings.length === 0;
     },
     warningSymbolsText() {
-      return this.noWarnings ? i18n.t('noWarnings') : i18n.t('warningSymbols')
+      return this.noWarnings ? i18n.t("noWarnings") : i18n.t("warningSymbols");
     },
     warningSymbolDaysText() {
-      return this.noWarnings ? '' : i18n.t('warningSymbolDays')
+      return this.noWarnings ? "" : i18n.t("warningSymbolDays");
     },
     showWarningsText() {
-      return i18n.t('showWarnings')
+      return i18n.t("showWarnings");
     },
     severalWarningsText() {
-      return i18n.t('severalWarnings')
+      return i18n.t("severalWarnings");
     },
     warningLevel1Text() {
-      return i18n.t('warningLevel1')
+      return i18n.t("warningLevel1");
     },
     warningLevel2Text() {
-      return i18n.t('warningLevel2')
+      return i18n.t("warningLevel2");
     },
     warningLevel3Text() {
-      return i18n.t('warningLevel3')
+      return i18n.t("warningLevel3");
     },
     warningLevel4Text() {
-      return i18n.t('warningLevel4')
+      return i18n.t("warningLevel4");
     },
     currentTheme() {
-      return this.$store.getters.theme
-    },
+      return this.$store.getters.theme;
+    }
   },
   watch: {
     input() {
-      this.showAll()
+      this.showAll();
     },
     visibleWarnings(newVisibleWarnings) {
       this.warnings.forEach((warning) => {
-        const isVisible = newVisibleWarnings.includes(warning.type)
-        if (isVisible !== warning.visible) {
-          Vue.set(warning, 'visible', isVisible)
+        const isVisible = newVisibleWarnings.includes(warning.type);
+        if(isVisible !== warning.visible) {
+          Vue.set(warning, "visible", isVisible);
         }
-      })
-    },
+      });
+    }
   },
   methods: {
     showAll() {
       this.$store.dispatch(
-        'setVisibleWarnings',
+        "setVisibleWarnings",
         this.warnings.reduce(
           (types, warning) => types.concat([warning.type]),
           []
         )
-      )
-    },
-  },
-}
+      );
+    }
+  }
+};
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 @import '../scss/constants.scss';
 @import '../scss/warningImages.scss';
 
@@ -240,6 +240,7 @@ hr.symbol-block-separator {
 
 hr.legend-separator {
   margin-top: 55px;
+
   &.no-warnings {
     margin-top: 10px;
   }
@@ -282,6 +283,7 @@ div.symbol-list-image-column {
 .symbol-list-image {
   height: $symbol-list-image-size;
   background-size: $symbol-list-image-size $symbol-list-image-size;
+
   &.sea-wind {
     background-image: url($warning-image-path + 'sea-wind-legend' + $image-extension);
   }
@@ -300,6 +302,7 @@ div.symbol-list-cell-text {
 
 div#fmi-warnings-list div.symbol-list-cell-text {
   padding-right: 0;
+
   hr {
     margin-right: 0;
   }
@@ -309,6 +312,7 @@ div#fmi-warnings-view {
   div.symbol-list-table {
     div.symbol-list-cell.symbol-list-cell-text {
       padding-right: 0;
+
       hr {
         margin-right: 0;
       }

@@ -1,5 +1,5 @@
 <template>
-  <div class="symbol-list-table" :class="currentTheme">
+  <div :class="currentTheme" class="symbol-list-table">
     <div class="symbol-list-cell symbol-list-cell-image">
       <div
         :class="`level-${severity} ${typeClass} symbol-list-image-column symbol-list-image warning-image`"></div>
@@ -14,31 +14,31 @@
           class="symbol-list-select-container d-none d-md-table-cell">
           <div
             :id="id"
+            :aria-label="input.visible ? hideLabel : showLabel"
             :class="[
               'symbol-list-select',
               input.visible ? 'flag-selected' : 'flag-unselected',
               { 'd-md-block': hideable },
               'd-none',
             ]"
-            :aria-label="input.visible ? hideLabel : showLabel"
             tabindex="0"
-            @touchmove="preventEvents"
-            @touchend="preventEvents"
-            @touchstart="toggle"
             @mousedown="toggle"
             @mouseenter="openTooltip"
             @mouseleave="closeTooltip"
+            @touchend="preventEvents"
+            @touchmove="preventEvents"
+            @touchstart="toggle"
             @keydown.enter="toggle"
             @keydown.space="toggle" />
           <b-tooltip
             id="fmi-warnings-toggle-tooltip"
-            :show.sync="showTooltip"
-            triggers=""
-            :target="id"
-            placement="top"
-            delay="0"
+            :container="`fmi-warnings-flag-${input.type}`"
             :fallback-placement="[]"
-            :container="`fmi-warnings-flag-${input.type}`">
+            :show.sync="showTooltip"
+            :target="id"
+            delay="0"
+            placement="top"
+            triggers="">
             <span @mouseenter="closeTooltip">
               {{ tooltipFirstLine }}
               <br />
@@ -53,87 +53,87 @@
 </template>
 
 <script>
-import 'focus-visible'
+import "focus-visible";
 
-import Vue from 'vue'
-import VueObserveVisibility from 'vue-observe-visibility'
+import Vue from "vue";
+import VueObserveVisibility from "vue-observe-visibility";
 
-import i18n from '../i18n'
-import fields from '../mixins/fields'
-import utils from '../mixins/utils'
+import i18n from "../i18n";
+import fields from "../mixins/fields";
+import utils from "../mixins/utils";
 
-Vue.use(VueObserveVisibility)
+Vue.use(VueObserveVisibility);
 
 export default {
-  name: 'Warning',
+  name: "Warning",
   mixins: [fields, utils],
-  props: ['input', 'hideable'],
+  props: ["input", "hideable"],
   data() {
     return {
-      showTooltip: false,
-    }
+      showTooltip: false
+    };
   },
   computed: {
     id() {
-      return `fmi-warnings-flag-${this.input.type}`
+      return `fmi-warnings-flag-${ this.input.type }`;
     },
     title() {
-      return i18n.t(this.input.type)
+      return i18n.t(this.input.type);
     },
     tooltipFirstLine() {
       return this.input.visible
-        ? i18n.t('selectWarningTooltipLine1')
-        : i18n.t('selectDisabledWarningTooltipLine1')
+        ? i18n.t("selectWarningTooltipLine1")
+        : i18n.t("selectDisabledWarningTooltipLine1");
     },
     tooltipSecondLine() {
       return this.input.visible
-        ? i18n.t('selectWarningTooltipLine2')
-        : i18n.t('selectDisabledWarningTooltipLine2')
+        ? i18n.t("selectWarningTooltipLine2")
+        : i18n.t("selectDisabledWarningTooltipLine2");
     },
     showLabel() {
-      return `${i18n.t(
-        'selectDisabledWarningTooltipLine1'
-      )} ${this.uncapitalize(this.title)} ${i18n.t(
-        'selectDisabledWarningTooltipLine2'
-      )}`
+      return `${ i18n.t(
+        "selectDisabledWarningTooltipLine1"
+      ) } ${ this.uncapitalize(this.title) } ${ i18n.t(
+        "selectDisabledWarningTooltipLine2"
+      ) }`;
     },
     hideLabel() {
-      return `${i18n.t('selectWarningTooltipLine1')} ${this.uncapitalize(
+      return `${ i18n.t("selectWarningTooltipLine1") } ${ this.uncapitalize(
         this.title
-      )} ${i18n.t('selectWarningTooltipLine2')}`
-    },
+      ) } ${ i18n.t("selectWarningTooltipLine2") }`;
+    }
   },
   methods: {
     toggle(event) {
-      event.preventDefault()
-      this.setWarningVisibility(!this.input.visible)
+      event.preventDefault();
+      this.setWarningVisibility(!this.input.visible);
     },
     setWarningVisibility(visible) {
-      this.$store.dispatch('setWarningVisibility', {
+      this.$store.dispatch("setWarningVisibility", {
         warning: this.input.type,
-        visible,
-      })
-      this.closeTooltip()
+        visible
+      });
+      this.closeTooltip();
     },
     openTooltip() {
-      this.showTooltip = true
+      this.showTooltip = true;
     },
     closeTooltip() {
-      this.showTooltip = false
+      this.showTooltip = false;
     },
     preventEvents(event) {
-      event.preventDefault()
+      event.preventDefault();
     },
     flagVisibilityChanged(isVisible, entry) {
-      if (!isVisible && !entry?.boundingClientRect?.width) {
-        this.setWarningVisibility(true)
+      if(!isVisible && !entry?.boundingClientRect?.width) {
+        this.setWarningVisibility(true);
       }
-    },
-  },
-}
+    }
+  }
+};
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 @import '../scss/constants.scss';
 @import '../scss/warningImages.scss';
 
@@ -218,6 +218,7 @@ div.symbol-list-text-select {
 div.symbol-list-text {
   display: table-cell;
   height: $symbol-list-line-height;
+
   &:focus:not([data-focus-visible-added]) {
     outline: none !important;
   }

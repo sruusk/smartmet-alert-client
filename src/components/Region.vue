@@ -1,9 +1,9 @@
 <template>
-  <b-card no-body class="mb-1 current-warning-panel" :class="currentTheme">
+  <b-card :class="currentTheme" class="mb-1 current-warning-panel" no-body>
     <b-card-header
-      header-tag="header"
       class="p-1"
-      header-class="current-warning-heading">
+      header-class="current-warning-heading"
+      header-tag="header">
       <div class="region-header">
         <div>
           <RegionWarning
@@ -17,18 +17,18 @@
       </div>
       <b-button
         v-b-toggle="identifier"
+        :aria-label="ariaButton"
         block
-        variant="info"
         class="current-warning-toggle"
-        :aria-label="ariaButton" />
+        variant="info" />
     </b-card-header>
     <b-collapse
       :id="identifier"
       v-model="visible"
-      class="accordion-item-region"
       :accordion="`accordion-${type}`"
-      tabindex="0"
-      :aria-label="ariaInfo">
+      :aria-label="ariaInfo"
+      class="accordion-item-region"
+      tabindex="0">
       <b-card-body body-class="p-0">
         <div class="current-description">
           <div class="current-description-table">
@@ -44,104 +44,104 @@
 </template>
 
 <script>
-import 'focus-visible'
+import "focus-visible";
 
-import i18n from '../i18n'
-import config from '../mixins/config'
-import DescriptionWarning from './DescriptionWarning.vue'
-import RegionWarning from './RegionWarning.vue'
+import i18n from "../i18n";
+import config from "../mixins/config";
+import DescriptionWarning from "./DescriptionWarning.vue";
+import RegionWarning from "./RegionWarning.vue";
 
 export default {
-  name: 'Region',
+  name: "Region",
   components: { RegionWarning, DescriptionWarning },
   mixins: [config],
   props: {
     type: {
-      type: String,
+      type: String
     },
     code: {
-      type: String,
+      type: String
     },
     name: {
-      type: String,
+      type: String
     },
     input: {
       type: Array,
-      default: () => [],
-    },
+      default: () => []
+    }
   },
   data() {
     return {
-      visible: false,
-    }
+      visible: false
+    };
   },
   computed: {
     identifier() {
-      return `accordion-item-${this.code}`
+      return `accordion-item-${ this.code }`;
     },
     regionName() {
-      return i18n.t(this.name)
+      return i18n.t(this.name);
     },
     warningsSummary() {
       return this.input.reduce((warnings, warningInfo) => {
-        if (
+        if(
           warningInfo != null &&
           warningInfo.identifiers != null &&
           warningInfo.identifiers.length > 0 &&
           warningInfo.coverage >= this.coverageCriterion
         ) {
           const warning =
-            this.$store.getters.warnings[warningInfo.identifiers[0]]
-          if (warning != null) {
-            warnings.push(warning)
+            this.$store.getters.warnings[warningInfo.identifiers[0]];
+          if(warning != null) {
+            warnings.push(warning);
           }
         }
-        return warnings
-      }, [])
+        return warnings;
+      }, []);
     },
     warnings() {
       return this.input.reduce(
         (allWarnings, warningInfo) =>
           allWarnings.concat(
             warningInfo.identifiers.reduce((warnings, identifier) => {
-              const warning = this.$store.getters.warnings[identifier]
-              if (
+              const warning = this.$store.getters.warnings[identifier];
+              if(
                 warning != null &&
                 this.warningsSummary.some(
                   (summaryWarning) => summaryWarning.type === warning.type
                 )
               ) {
-                warnings.push(warning)
+                warnings.push(warning);
               }
-              return warnings
+              return warnings;
             }, [])
           ),
         []
-      )
+      );
     },
     ariaButton() {
       return `${
         this.visible
-          ? i18n.t('infoButtonAriaLabelCloseRegion')
-          : i18n.t('infoButtonAriaLabelShowRegion')
-      } ${this.regionName} ${i18n.t('infoButtonAriaLabelValidWarnings')}`
+          ? i18n.t("infoButtonAriaLabelCloseRegion")
+          : i18n.t("infoButtonAriaLabelShowRegion")
+      } ${ this.regionName } ${ i18n.t("infoButtonAriaLabelValidWarnings") }`;
     },
     ariaInfo() {
       return this.warnings.map(
         (warning, index) =>
-          `${index > 0 ? ' ' : ''}${i18n.t(warning.type)}: ${i18n.t(
-            `warningLevel${warning.severity}`
-          )}.`
-      )
+          `${ index > 0 ? " " : "" }${ i18n.t(warning.type) }: ${ i18n.t(
+            `warningLevel${ warning.severity }`
+          ) }.`
+      );
     },
     currentTheme() {
-      return this.$store.getters.theme
-    },
-  },
-}
+      return this.$store.getters.theme;
+    }
+  }
+};
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 @import '../scss/constants.scss';
 
 .current-warning-panel {
@@ -184,6 +184,7 @@ button.btn-info {
   overflow: hidden;
   text-overflow: ellipsis;
   margin-left: 15px;
+
   &:focus:not([data-focus-visible-added]) {
     outline: none !important;
     overflow: visible;
@@ -218,6 +219,7 @@ button.btn-info {
     position: relative;
     z-index: 1;
     box-shadow: none !important;
+
     &:not([data-focus-visible-added]) {
       outline: none !important;
     }

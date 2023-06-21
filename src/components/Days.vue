@@ -1,13 +1,13 @@
 <template>
-  <div class="row date-selector" :class="currentTheme">
+  <div :class="currentTheme" class="row date-selector">
     <b-tabs
       id="fmi-warnings-date-selector"
       v-model="selectedDay"
+      :justified="true"
       :lazy="true"
       :no-fade="true"
       nav-class="fmi-warnings-date-nav"
-      nav-wrapper-class="fmi-warnings-date-wrapper"
-      :justified="true">
+      nav-wrapper-class="fmi-warnings-date-wrapper">
       <b-tab
         v-for="(n, i) in numberOfDays"
         :key="i"
@@ -15,18 +15,18 @@
         :title-link-class="['day', `day${i}`]">
         <template #title>
           <DaySmall
+            :active="i === selectedDay"
+            :geometry-id="geometryId"
             :index="i"
             :input="input[i]"
             :regions="regions[i]"
-            :geometry-id="geometryId"
-            :active="i === selectedDay"
             :static-days="staticDays" />
         </template>
         <DayLarge
+          :geometry-id="geometryId"
           :index="i"
           :input="input[i]"
           :regions="regions[i]"
-          :geometry-id="geometryId"
           :static-days="staticDays" />
       </b-tab>
     </b-tabs>
@@ -34,65 +34,67 @@
 </template>
 
 <script>
-import 'focus-visible'
+import "focus-visible";
 
-import DayLarge from './DayLarge.vue'
-import DaySmall from './DaySmall.vue'
+import DayLarge from "./DayLarge.vue";
+import DaySmall from "./DaySmall.vue";
 
 export default {
-  name: 'Days',
+  name: "Days",
   components: {
     DaySmall,
-    DayLarge,
+    DayLarge
   },
   props: {
     input: {
       type: Array,
-      default: () => [],
+      default: () => []
     },
     defaultDay: {
       type: Number,
       default: 0,
       validator(value) {
-        return [0, 1, 2, 3, 4].includes(value)
-      },
+        return [0, 1, 2, 3, 4].includes(value);
+      }
     },
     staticDays: {
       type: Boolean,
-      default: true,
+      default: true
     },
     regions: Array,
-    geometryId: Number,
+    geometryId: Number
   },
   data() {
     return {
-      selectedDay: this.defaultDay,
-    }
+      selectedDay: this.defaultDay
+    };
   },
   computed: {
     numberOfDays() {
-      return 5
+      return 5;
     },
     currentTheme() {
-      return this.$store.getters.theme
-    },
+      return this.$store.getters.theme;
+    }
   },
   watch: {
     selectedDay(newValue) {
-      this.$store.dispatch('setSelectedDay', newValue)
-    },
-  },
-}
+      this.$store.dispatch("setSelectedDay", newValue);
+    }
+  }
+};
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 @import '../scss/constants.scss';
 
 .date-selector {
   margin: 0;
+
   &.light {
     background-color: $light-date-selector-background-color;
   }
+
   &.dark {
     background-color: $dark-date-selector-background-color;
   }
@@ -116,6 +118,7 @@ export default {
   margin: 0;
   text-align: center;
   color: transparent;
+
   &:focus:not([data-focus-visible-added]) {
     outline: none !important;
   }
@@ -123,6 +126,7 @@ export default {
 
 ::v-deep a.day.day0 {
   border: none !important;
+
   div.date-selector-cell {
     > div {
       border-top: none !important;
@@ -130,9 +134,11 @@ export default {
       border-left: none !important;
       border-right: none !important;
     }
+
     &.light > div {
       border-right: 1px solid $light-border-color !important;
     }
+
     &.dark > div {
       border-right: 1px solid $dark-border-color !important;
     }
@@ -143,6 +149,7 @@ export default {
 ::v-deep a.day.day2,
 ::v-deep a.day.day3 {
   border: none !important;
+
   div.date-selector-cell {
     > div {
       border-top: none !important;
@@ -150,10 +157,12 @@ export default {
       border-left: none !important;
       border-right: none !important;
     }
+
     &.light > div {
       border-left: 1px solid $light-border-color !important;
       border-right: 1px solid $light-border-color !important;
     }
+
     &.dark > div {
       border-left: 1px solid $dark-border-color !important;
       border-right: 1px solid $dark-border-color !important;
@@ -163,6 +172,7 @@ export default {
 
 ::v-deep a.day.day4 {
   border: none !important;
+
   div.date-selector-cell {
     > div {
       border-top: none !important;
@@ -170,9 +180,11 @@ export default {
       border-left: none !important;
       border-right: none !important;
     }
+
     &.light > div {
       border-left: 1px solid $light-border-color !important;
     }
+
     &.dark > div {
       border-left: 1px solid $dark-border-color !important;
     }

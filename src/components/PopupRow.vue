@@ -20,28 +20,28 @@
       </span>
     </div>
     <div
-      class="popup-table-cell popup-table-text-cell"
       :class="[`text-level-${severity}`]"
+      class="popup-table-cell popup-table-text-cell"
       v-html="input.interval"></div>
   </div>
 </template>
 
 <script>
-import fields from '../mixins/fields'
+import fields from "../mixins/fields";
 
 export default {
-  name: 'PopupRow',
+  name: "PopupRow",
   mixins: [fields],
   props: {
     input: {
       type: Object,
-      default: () => ({}),
-    },
-  },
-}
+      default: () => ({})
+    }
+  }
+};
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 @import '../scss/constants.scss';
 @import '../scss/warningImages.scss';
 
@@ -91,6 +91,7 @@ span.warning-symbol-text {
   overflow: hidden;
   text-overflow: ellipsis;
   padding: 5px 0 0 2px;
+
   &.text-level-0 {
     padding-left: 12px;
   }

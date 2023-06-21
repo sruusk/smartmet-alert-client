@@ -1,11 +1,11 @@
 <template>
-  <div class="current-description-row" :class="currentTheme">
-    <div class="current-description-image-cell" aria-hidden="true">
+  <div :class="currentTheme" class="current-description-row">
+    <div aria-hidden="true" class="current-description-image-cell">
       <div
         :class="`current-description-image warning-image symbol-image symbol-image-rotate-${rotation} level-${input.severity} ${typeClass}`">
         <span
           :class="`symbol-text symbol-text-rotate-${rotation} region-warning-symbol-text`"
-          >{{ input.text }}</span
+        >{{ input.text }}</span
         >
       </div>
     </div>
@@ -28,7 +28,7 @@
             :class="['ext-link', { 'd-none': linkHidden }]"
             :href="`${input.link}`"
             target="_blank"
-            >{{ input.linkText }}</a
+          >{{ input.linkText }}</a
           >
         </div>
       </div>
@@ -37,37 +37,37 @@
 </template>
 
 <script>
-import 'focus-visible'
+import "focus-visible";
 
-import i18n from '../i18n'
-import fields from '../mixins/fields'
-import utils from '../mixins/utils'
+import i18n from "../i18n";
+import fields from "../mixins/fields";
+import utils from "../mixins/utils";
 
 export default {
-  name: 'DescriptionWarning',
+  name: "DescriptionWarning",
   mixins: [fields, utils],
-  props: ['input'],
+  props: ["input"],
   computed: {
     warningTitle() {
-      return i18n.t(this.input.type)
+      return i18n.t(this.input.type);
     },
     info() {
-      return this.input.info[i18n.locale]
+      return this.input.info[i18n.locale];
     },
     validText() {
-      return i18n.t('valid')
+      return i18n.t("valid");
     },
     linkHidden() {
-      return this.input.link == null || this.input.link.length === 0
+      return this.input.link == null || this.input.link.length === 0;
     },
     description() {
-      return i18n.t(`${this.input.type}DescriptionLevel${this.input.severity}`)
-    },
-  },
-}
+      return i18n.t(`${ this.input.type }DescriptionLevel${ this.input.severity }`);
+    }
+  }
+};
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 @import '../scss/constants.scss';
 @import '../scss/warningImages.scss';
 
@@ -137,9 +137,9 @@ div.current-description-text-cell {
 
 a.ext-link {
   padding-right: 14px;
-  background: transparent url($ui-image-path + 'ext-link.gif') no-repeat center
-    right;
+  background: transparent url($ui-image-path + 'ext-link.gif') no-repeat center right;
   margin-right: 2px;
+
   &:focus:not([data-focus-visible-added]) {
     outline: none !important;
   }

@@ -5,18 +5,18 @@
       <a
         id="fmi-warnings-region-content"
         :href="fromLandToNextContentHref"
-        tabindex="0"
         class="fmi-warnings-to-next-content sr-only sr-only-focusable"
-        >{{ fromLandtoNextContentText }}</a
+        tabindex="0"
+      >{{ fromLandtoNextContentText }}</a
       >
       <div id="accordion-land" class="accordion-region" role="tablist">
         <div v-for="region in regions.land" :key="region.key">
           <Region
             v-if="region.warnings.length"
-            type="land"
             :code="region.key"
+            :input="region.warnings"
             :name="region.name"
-            :input="region.warnings" />
+            type="land" />
         </div>
       </div>
     </div>
@@ -24,19 +24,19 @@
       <h3 id="header-sea" class="header-region">{{ seaText }}</h3>
       <a
         :id="fromSeaToNextContentId"
+        class="fmi-warnings-to-next-content sr-only sr-only-focusable"
         href="#fmi-warnings-end-of-regions"
         tabindex="0"
-        class="fmi-warnings-to-next-content sr-only sr-only-focusable"
-        >{{ fromSeatoNextContentText }}</a
+      >{{ fromSeatoNextContentText }}</a
       >
       <div id="accordion-sea" class="accordion-region" role="tablist">
         <div v-for="region in regions.sea" :key="region.key">
           <Region
             v-if="region.warnings.length"
-            type="land"
             :code="region.key"
+            :input="region.warnings"
             :name="region.name"
-            :input="region.warnings" />
+            type="land" />
         </div>
       </div>
     </div>
@@ -45,87 +45,87 @@
 </template>
 
 <script>
-import i18n from '../i18n'
-import config from '../mixins/config'
-import utils from '../mixins/utils'
-import Region from './Region.vue'
+import i18n from "../i18n";
+import config from "../mixins/config";
+import utils from "../mixins/utils";
+import Region from "./Region.vue";
 
 export default {
-  name: 'Regions',
+  name: "Regions",
   components: { Region },
   mixins: [config, utils],
   props: {
     input: Array,
     parents: Object,
-    geometryId: Number,
+    geometryId: Number
   },
   computed: {
     landText() {
-      return i18n.t('regionLand')
+      return i18n.t("regionLand");
     },
     seaText() {
-      return i18n.t('regionSea')
+      return i18n.t("regionSea");
     },
     fromLandtoNextContentText() {
-      return `${i18n.t('warningsIn')} ${this.regions.land.length} ${i18n.t(
-        'toNextContent'
-      )}`
+      return `${ i18n.t("warningsIn") } ${ this.regions.land.length } ${ i18n.t(
+        "toNextContent"
+      ) }`;
     },
     fromSeatoNextContentText() {
-      return `${i18n.t('warningsIn')} ${this.regions.sea.length} ${i18n.t(
-        'toNextContent'
-      )}`
+      return `${ i18n.t("warningsIn") } ${ this.regions.sea.length } ${ i18n.t(
+        "toNextContent"
+      ) }`;
     },
     fromLandToNextContentHref() {
       return this.anySeaWarnings
-        ? '#fmi-warnings-from-sea-to-next-content'
-        : '#fmi-warnings-end-of-regions'
+        ? "#fmi-warnings-from-sea-to-next-content"
+        : "#fmi-warnings-end-of-regions";
     },
     fromSeaToNextContentId() {
       return this.anyLandWarnings
-        ? 'fmi-warnings-from-sea-to-next-content'
-        : 'fmi-warnings-region-content'
+        ? "fmi-warnings-from-sea-to-next-content"
+        : "fmi-warnings-region-content";
     },
     regions() {
       const compareRegions = (region1, region2) =>
-        region1.regionIndex - region2.regionIndex
-      const overriddenRegions = this.parents
+        region1.regionIndex - region2.regionIndex;
+      const overriddenRegions = this.parents;
       const overriddenIds = Object.keys(overriddenRegions).filter(
         (regionId) => overriddenRegions[regionId][this.selectedDay]
-      )
+      );
       return [this.REGION_LAND, this.REGION_SEA].reduce(
         (regionData, regionType) => {
           // eslint-disable-next-line no-param-reassign
           regionData[regionType] = this.input[this.selectedDay][
             regionType
-          ].reduce((regions, region) => {
-            const parentId = this.geometries[this.geometryId][region.key].parent
-            if (
+            ].reduce((regions, region) => {
+            const parentId = this.geometries[this.geometryId][region.key].parent;
+            if(
               !overriddenIds.includes(region.key) &&
               (!parentId || overriddenIds.includes(parentId)) &&
               region.warnings.some(
                 (warning) => warning.coverage >= this.coverageCriterion
               )
             ) {
-              regions.push(region)
+              regions.push(region);
             }
-            return regions
-          }, [])
-          regionData[regionType].sort(compareRegions)
-          return regionData
+            return regions;
+          }, []);
+          regionData[regionType].sort(compareRegions);
+          return regionData;
         },
         {}
-      )
+      );
     },
     selectedDay() {
-      return this.$store.getters.selectedDay
+      return this.$store.getters.selectedDay;
     },
     anyLandWarnings() {
-      return this.anyRegionWarnings('land')
+      return this.anyRegionWarnings("land");
     },
     anySeaWarnings() {
-      return this.anyRegionWarnings('sea')
-    },
+      return this.anyRegionWarnings("sea");
+    }
   },
   methods: {
     anyRegionWarnings(regionType) {
@@ -133,13 +133,13 @@ export default {
         this.regions != null &&
         this.regions[regionType] != null &&
         this.regions[regionType].length > 0
-      )
-    },
-  },
-}
+      );
+    }
+  }
+};
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 @import '../scss/constants.scss';
 
 h3 {
@@ -147,9 +147,11 @@ h3 {
   font-weight: bold;
   margin-top: 15px;
   margin-left: 15px;
+
   &.symbol-list-title {
     margin-left: -15px;
   }
+
   color: black;
 }
 

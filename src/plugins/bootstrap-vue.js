@@ -1,7 +1,7 @@
-import 'bootstrap/dist/css/bootstrap.min.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap-vue/dist/bootstrap-vue.css";
 
-import BootstrapVue from 'bootstrap-vue'
-import Vue from 'vue'
+import BootstrapVue from "bootstrap-vue";
+import Vue from "vue";
 
-Vue.use(BootstrapVue)
+Vue.use(BootstrapVue);

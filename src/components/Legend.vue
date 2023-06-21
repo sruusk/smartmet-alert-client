@@ -1,16 +1,16 @@
 <template>
-  <div class="sticky-top" :class="currentTheme">
+  <div :class="currentTheme" class="sticky-top">
     <div class="row symbol-list-header-row">
       <nav class="symbol-list-header bold-text">
         {{ warningSymbolsText }}
         <br v-if="input.length > 0" class="symbol-list-header-line-break" />
       </nav>
     </div>
-    <b-card no-body class="mb-1 d-md-none legends-panel">
+    <b-card class="mb-1 d-md-none legends-panel" no-body>
       <b-card-header
-        header-tag="header"
         class="p-1"
-        header-class="legends-heading">
+        header-class="legends-heading"
+        header-tag="header">
         <div class="legends-header">
           <span class="legends-text">
             {{ toggleLegendsText }}
@@ -19,8 +19,8 @@
         <b-button
           v-b-toggle.legends-collapse
           block
-          variant="info"
-          class="legends-toggle" />
+          class="legends-toggle"
+          variant="info" />
       </b-card-header>
       <b-collapse
         id="legends-collapse"
@@ -41,64 +41,64 @@
 </template>
 
 <script>
-import Vue from 'vue'
+import Vue from "vue";
 
-import i18n from '../i18n'
-import Warnings from './Warnings.vue'
+import i18n from "../i18n";
+import Warnings from "./Warnings.vue";
 
 export default {
-  name: 'Legend',
+  name: "Legend",
   components: {
-    Warnings,
+    Warnings
   },
-  props: ['input'],
+  props: ["input"],
   data() {
     return {
-      visible: false,
-    }
+      visible: false
+    };
   },
   computed: {
     warnings() {
-      return this.input
+      return this.input;
     },
     warningSymbolsText() {
-      return i18n.t('legends')
+      return i18n.t("legends");
     },
     toggleLegendsText() {
-      return this.visible ? i18n.t('hideLegends') : i18n.t('showLegends')
+      return this.visible ? i18n.t("hideLegends") : i18n.t("showLegends");
     },
     currentTheme() {
-      return this.$store.getters.theme
-    },
+      return this.$store.getters.theme;
+    }
   },
   watch: {
     input() {
-      this.showAll()
+      this.showAll();
     },
     visibleWarnings(newVisibleWarnings) {
       this.warnings.forEach((warning) => {
-        const isVisible = newVisibleWarnings.includes(warning.type)
-        if (isVisible !== warning.visible) {
-          Vue.set(warning, 'visible', isVisible)
+        const isVisible = newVisibleWarnings.includes(warning.type);
+        if(isVisible !== warning.visible) {
+          Vue.set(warning, "visible", isVisible);
         }
-      })
-    },
+      });
+    }
   },
   methods: {
     showAll() {
       this.$store.dispatch(
-        'setVisibleWarnings',
+        "setVisibleWarnings",
         this.warnings.reduce(
           (types, warning) => types.concat([warning.type]),
           []
         )
-      )
-    },
-  },
-}
+      );
+    }
+  }
+};
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 @import '../scss/constants.scss';
 
 div.symbol-list-header-row {
@@ -106,6 +106,7 @@ div.symbol-list-header-row {
   padding-right: 0;
   padding-bottom: 0;
   margin-left: 0;
+
   span {
     white-space: nowrap;
   }
@@ -160,6 +161,7 @@ div.symbol-list-header-row {
   overflow: hidden;
   text-overflow: ellipsis;
   margin-left: 15px;
+
   &:focus:not([data-focus-visible-added]) {
     outline: none !important;
     overflow: visible;
@@ -194,6 +196,7 @@ div.symbol-list-header-row {
     position: relative;
     z-index: 1;
     box-shadow: none !important;
+
     &:not([data-focus-visible-added]) {
       outline: none !important;
     }

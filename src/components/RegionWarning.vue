@@ -10,29 +10,29 @@
       `${typeClass}`,
     ]">
     <span
-      aria-hidden="true"
       :class="[
         'warning-symbol-text',
         'symbol-text',
         `symbol-text-rotate-${rotation}`,
       ]"
-      >{{ input.text }}</span
+      aria-hidden="true"
+    >{{ input.text }}</span
     >
   </div>
 </template>
 
 <script>
-import fields from '../mixins/fields'
-import utils from '../mixins/utils'
+import fields from "../mixins/fields";
+import utils from "../mixins/utils";
 
 export default {
-  name: 'RegionWarning',
+  name: "RegionWarning",
   mixins: [fields, utils],
-  props: ['input'],
-}
+  props: ["input"]
+};
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 @import '../scss/constants.scss';
 @import '../scss/warningImages.scss';
 

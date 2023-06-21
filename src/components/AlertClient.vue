@@ -5,17 +5,17 @@
     :data-smartmet-alert-client-version="version">
     <div id="fmi-warnings-errors" :class="errors" />
     <div>
-      <div class="container-fluid" :class="currentTheme">
+      <div :class="currentTheme" class="container-fluid">
         <div class="row">
           <div class="col-12 col-md-8 col-lg-8 col-xl-8 day-region-views">
-            <h3 class="valid-warnings" :class="initialized && 'initialized'">
+            <h3 :class="initialized && 'initialized'" class="valid-warnings">
               {{ validWarningsText }}
               <span v-if="!initialized"
                 ><a
                   :href="supportedBrowsersLink"
-                  target="_blank"
+                  class="supported-browsers"
                   rel="noopener noreferrer"
-                  class="supported-browsers">
+                  target="_blank">
                   {{ supportedBrowsers }}</a
                 >
                 {{ additionalWarningsText }}
@@ -25,19 +25,19 @@
               <a
                 v-if="numWarnings"
                 id="fmi-warnings-to-text-content"
+                class="sr-only sr-only-focusable"
                 href="#fmi-warnings-region-content"
                 tabindex="0"
-                class="sr-only sr-only-focusable"
                 >{{ toContentText }}</a
               >
               <div v-else :aria-label="noWarningsText"></div>
             </div>
             <Days
-              :input="days"
               :default-day="selectedDay"
-              :static-days="staticDays"
+              :geometry-id="geometryId"
+              :input="days"
               :regions="regions"
-              :geometry-id="geometryId" />
+              :static-days="staticDays" />
           </div>
           <div class="col-12 col-md-4 col-lg-4 col-xl-4 symbol-list">
             <Legend v-show="validData" :input="legend" />
@@ -46,9 +46,9 @@
         <div v-if="regionListEnabled" class="row">
           <div class="col-12 col-md-8 col-lg-8 col-xl-8 day-region-views">
             <Regions
+              :geometry-id="geometryId"
               :input="regions"
-              :parents="parents"
-              :geometry-id="geometryId" />
+              :parents="parents" />
           </div>
           <div class="col-12 col-md-4 col-lg-4 col-xl-4 symbol-list"></div>
         </div>
@@ -180,6 +180,9 @@ export default {
     warningsData() {
       this.createDataForChildren()
     },
+    language() {
+      i18n.locale = this.language
+    },
   },
   async beforeCreate() {
     if (!this.$store.hasModule('warningsStore')) {
@@ -279,7 +282,7 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 @import '../scss/constants.scss';
 
 ::v-deep * {
@@ -331,6 +334,7 @@ div#fmi-warnings {
 
   h3.valid-warnings {
     font-weight: normal;
+
     &.initialized {
       font-weight: bold;
     }
@@ -349,8 +353,10 @@ div#fmi-warnings {
     font-family: $font-family;
     font-size: $font-size;
     height: 20px;
+
     &:focus {
       outline-offset: 2px;
+
       &:not([data-focus-visible-added]) {
         outline: none !important;
       }
@@ -361,6 +367,7 @@ div#fmi-warnings {
     *:focus {
       outline: dashed 2px $light-outline-color !important;
     }
+
     a#fmi-warnings-to-text-content {
       &:focus {
         outline: dashed 2px $light-outline-color !important;
@@ -372,6 +379,7 @@ div#fmi-warnings {
     *:focus {
       outline: dashed 2px $dark-outline-color !important;
     }
+
     a#fmi-warnings-to-text-content {
       &:focus {
         outline: dashed 2px $dark-outline-color !important;
